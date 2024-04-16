@@ -1693,11 +1693,12 @@ class FineTuningDataset(BaseDataset):
                 # path情報を作る
                 abs_path = None
 
-                # まず画像を優先して探す
-                if os.path.exists(image_key):
-                    abs_path = image_key
+                # 相対パスを絶対パスに変換するためのパスを結合
+                potential_path = os.path.join(subset.image_dir, image_key)
+                if os.path.exists(potential_path):
+                    abs_path = potential_path
                 else:
-                    # わりといい加減だがいい方法が思いつかん
+                    # glob_imagesを使って、ディレクトリ内でマッチするファイルを探す
                     paths = glob_images(subset.image_dir, image_key)
                     if len(paths) > 0:
                         abs_path = paths[0]
